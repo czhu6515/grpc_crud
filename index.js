@@ -22,12 +22,14 @@ const server = new grpc.Server()
 
 server.addService(notesProto.NoteService.service, {
     list: (_, callback) => {
+        console.log(notes)
         callback(null, notes)
     },
     insert: (call, callback) => {
         let note = call.request
         note.id = uuidv1()
         notes.push(note)
+        console.log(notes)
         callback(null, note)
     },
     update: (call, callback) => {
