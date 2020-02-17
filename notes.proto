@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+service NoteService {
+  rpc List (Empty) returns (NoteList) {}
+  rpc Insert (Note) returns (Note) {}
+  rpc Delete (NoteRequestId) returns (Note) {}
+}
+
+message Empty {};
+
+message NoteRequestId {
+  string id = 1;
+}
+
+message Note {
+  string id = 1;
+  string title = 2;
+  string content = 3;
+}
+
+message NoteList {
+  repeated Note notes = 1;
+}
+
