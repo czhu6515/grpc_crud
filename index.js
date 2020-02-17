@@ -1,9 +1,17 @@
+const protoLoader = require('@grpc/proto-loader')
 const grpc = require('grpc')
 const uuidv1 = require('uuidv1')
 
-const notesProto = grpc.load('notes.proto')
+const options = {
+    keepCase: true,
+    longs: String,
+    enums: String,
+    defaults: true,
+    oneofs: true
+}
 
-
+const NotesDefinition = protoLoader.loadSync('notes.proto', options);
+const notesProto = grpc.loadPackageDefinition(NotesDefinition);
 
 const notes = [
     { id: '1', title: 'Note 1', content: 'Content 1'},
@@ -11,6 +19,7 @@ const notes = [
 ]
 
 const server = new grpc.Server()
+
 server.addService(notesProto.NoteService.service, {
     list: (_, callback) => {
         callback(null, notes)
