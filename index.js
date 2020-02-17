@@ -21,6 +21,21 @@ server.addService(notesProto.NoteService.service, {
         notes.push(note)
         callback(null, note)
     },
+    update: (call, callback) => {
+        let note = call.request
+        const ind = notes.findIndex(ele => ele.id === note.id)
+        if (ind !== -1 ){
+            const newNote = Object.assign(notes[ind], note)  
+            notes.splice(ind, 1)
+            notes.push(newNote)
+            callback(null, newNote)
+        } else {
+            callback({
+                code: grpc.status.NOT_FOUND,
+                details: 'no note with that id found!'
+            })
+        }
+    },
     delete: (call, callback) => {
         let note = call.request
         const ind = notes.findIndex(ele => ele.id === note.id)
