@@ -1,4 +1,4 @@
-const client = require('../client')
+const client = require('./client')
 
 let updatedNote = {
     id: '1',
