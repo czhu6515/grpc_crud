@@ -1,5 +1,5 @@
 const grpcLoader = require('@grpc/proto-loader')
-const grpc = require('grpc')
+const grpc = require('@grpc/grpc-js')
 
 const options = {
     keepCase: true,
@@ -14,7 +14,5 @@ const NoteService = grpc.loadPackageDefinition(NotesDefinition).NoteService;
 
 const client = new NoteService('localhost:8008', 
     grpc.credentials.createInsecure())
-
-
 
 module.exports = client

@@ -1,10 +1,10 @@
 syntax = "proto3";
 
 service NoteService {
-  rpc List (Empty) returns (NoteList);
-  rpc Insert (Note) returns (Note);
-  rpc Update (Note) returns (Note);
-  rpc Delete (NoteRequestId) returns (Note);
+  rpc List (Note) returns (NoteList) {}
+  rpc Insert (Note) returns (Note) {}
+  rpc Update (Note) returns (Note) {}
+  rpc Delete (NoteRequestId) returns (Note) {}
 }
 
 message Empty {};

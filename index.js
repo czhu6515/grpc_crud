@@ -1,5 +1,5 @@
 const protoLoader = require('@grpc/proto-loader')
-const grpc = require('grpc')
+const grpc = require('@grpc/grpc-js')
 const uuidv1 = require('uuidv1')
 
 const options = {
@@ -7,23 +7,22 @@ const options = {
     longs: String,
     enums: String,
     defaults: true,
-    oneofs: true,
-    arrays: true
+    oneofs: true
 }
 
-const NotesDefinition = protoLoader.loadSync('notes.proto', options);
-const notesProto = grpc.loadPackageDefinition(NotesDefinition);
+const proto = protoLoader.loadSync('./notes.proto', options);
+const notesProto = grpc.loadPackageDefinition(proto);
 
 const notes = [
     { id: '1', title: 'Note 1', content: 'Content 1'},
     { id: '2', title: 'Note 2', content: 'Content 2'}
 ]
-console.log(notes)
+
 const server = new grpc.Server()
 
 server.addService(notesProto.NoteService.service, {
     list: (_, callback) => {
-        callback(null, "notes")
+        callback(null, notes)
     },
     insert: (call, callback) => {
         let note = call.request
@@ -64,8 +63,8 @@ server.addService(notesProto.NoteService.service, {
 
 
 const PORT = '127.0.0.1:8008'
-server.bind(PORT, grpc.ServerCredentials.createInsecure())
 
-console.log(`Server running on PORT: ${PORT}`)
-
-server.start()
+server.bindAsync(PORT, grpc.ServerCredentials.createInsecure(), _ => {
+    server.start()
+    console.log(`Server running on PORT: ${PORT}`)
+})
